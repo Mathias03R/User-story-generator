@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDE de Compilación Agile DSL + Gemini API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col font-sans">
+
+    <header class="bg-gray-900 border-b border-gray-800 p-4 shadow flex justify-between items-center">
+        <h1 class="text-md font-bold text-cyan-400 flex items-center gap-2">
+            🧬 Agile Compiler IDE <span class="text-xs bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded border border-cyan-800">Gemini Live</span>
+        </h1>
+        <p class="text-xs text-gray-500 font-mono">Entorno de Análisis de Lenguajes Estructurados</p>
+    </header>
+
+    <div class="mx-6 mt-4">
+        <div class="p-2.5 bg-gray-900 border-l-4 {% if status_type == 'success' %}border-emerald-500 text-emerald-400{% elif status_type == 'error' %}border-red-500 text-red-400{% else %}border-cyan-500 text-cyan-400{% endif %} text-xs font-mono rounded shadow">
+            {{ status_message }}
+        </div>
+    </div>
+
+    <main class="flex-1 p-6 grid grid-cols-1 xl:grid-cols-3 gap-6 overflow-hidden">
+        
+        <div class="flex flex-col gap-4 bg-gray-900 p-4 rounded-lg border border-gray-800 shadow">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">📂 Entrada de Datos e IA</h2>
+            
+            <form action="/" method="POST" class="flex flex-col gap-2">
+                <input type="hidden" name="action" value="generate_dsl">
+                <input type="hidden" name="dsl_code" value="{{ generated_dsl }}">
+                <label class="text-[11px] font-mono text-gray-400">Requerimiento Comercial (Lenguaje Natural):</label>
+                <textarea name="prompt" class="h-20 w-full p-2 bg-gray-950 text-xs border border-gray-800 rounded focus:border-cyan-500 focus:outline-none text-gray-300 resize-none">{{ user_prompt }}</textarea>
+                <button type="submit" class="bg-cyan-700 hover:bg-cyan-600 text-white text-xs py-2 rounded font-semibold transition-all">
+                    Consultar Gemini API 🤖
+                </button>
+            </form>
+
+            <form action="/" method="POST" class="flex-1 flex flex-col gap-2 mt-2">
+                <input type="hidden" name="action" value="compile_dsl">
+                <input type="hidden" name="prompt" value="{{ user_prompt }}">
+                <label class="text-[11px] font-mono text-emerald-400">Editor del Código Fuente (DSL Propietario):</label>
+                <textarea name="dsl_code" class="flex-1 w-full p-3 bg-gray-950 text-emerald-400 font-mono text-xs rounded border border-gray-800 focus:border-emerald-500 focus:outline-none resize-none min-h-[250px]">{{ generated_dsl }}</textarea>
+                <button type="submit" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-2.5 rounded font-semibold transition-all shadow">
+                    ⚡ Ejecutar Fases del Compilador
+                </button>
+            </form>
+        </div>
+
+        <div class="flex flex-col gap-4 bg-gray-900 p-4 rounded-lg border border-gray-800 shadow">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">🔬 Diagnóstico Interno del Compilador</h2>
+            
+            <div class="flex-1 flex flex-col min-h-[180px]">
+                <span class="text-[11px] font-mono text-purple-400 mb-1">📟 Fase 1: Flujo de Tokens (Analizador Léxico):</span>
+                <div class="flex-1 bg-gray-950 p-2 rounded font-mono text-[10px] text-purple-300 overflow-y-auto whitespace-pre-wrap max-h-[200px] border border-gray-800">
+                    {% if tokens_list %}
+                        {% for t in tokens_list %}
+{{ t }}
+                        {% endfor %}
+                    {% else %}
+[Esperando análisis léxico...]
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col min-h-[220px]">
+                <span class="text-[11px] font-mono text-amber-400 mb-1">🌳 Fase 2: Árbol de Sintaxis Abstracta (AST):</span>
+                <div class="flex-1 bg-gray-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-y-auto whitespace-pre max-h-[250px] border border-gray-800">
+                    {% if ast_json %}{{ ast_json }}{% else %}{ "status": "Esperando parsing..." }{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 p-4 rounded-lg border border-gray-800 shadow flex flex-col">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">🎯 Salida Objeto: Tablero Ágil</h2>
+            
+            <div class="flex-1 overflow-y-auto space-y-3 mt-3 max-h-[550px] pr-1">
+                {% if stories %}
+                    {% for story in stories %}
+                        <div class="bg-gray-950 p-3 rounded border-l-4 border-cyan-500 text-xs shadow">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <span class="bg-gray-900 text-cyan-400 px-1.5 py-0.5 rounded font-mono font-bold">{{ story.id }}</span>
+                                <span class="bg-purple-950 text-purple-300 font-bold px-1.5 py-0.5 rounded">📊 Semántica: {{ story.complejidad }} SP</span>
+                            </div>
+                            <div class="space-y-1 text-gray-400">
+                                <p><strong>Como:</strong> {{ story.como }}</p>
+                                <p><strong>Quiero:</strong> <span class="text-gray-200">{{ story.quiero }}</span></p>
+                                <p><strong>Para:</strong> {{ story.para }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="h-full flex items-center justify-center text-gray-600 italic text-xs text-center p-6">
+                        Ninguna estructura generada en producción. Compila el DSL para renderizar las tarjetas de historias.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-900 border-t border-gray-800 p-2 text-center text-[10px] text-gray-600 font-mono">
+        Análisis Dirigido por la Sintaxis | Gemini SDK e Infraestructura de Compiladores Unificada.
+    </footer>
+
+</body>
+</html>
