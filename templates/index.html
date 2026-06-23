@@ -8,72 +8,109 @@
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col font-sans">
 
-    <header class="bg-gray-900 border-b border-gray-800 p-4 shadow flex justify-between items-center">
-        <h1 class="text-md font-bold text-cyan-400 flex items-center gap-2">
-            🧬 Agile Compiler IDE <span class="text-xs bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded border border-cyan-800">Gemini Live</span>
-        </h1>
-        <p class="text-xs text-gray-500 font-mono">Entorno de Análisis de Lenguajes Estructurados</p>
+    <header class="bg-gray-900 border-b border-gray-800 p-4 shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+        <div>
+            <h1 class="text-md font-bold text-cyan-400 flex items-center gap-2">
+                🧬 Agile Compiler IDE <span class="text-xs bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded border border-cyan-800">Módulo Científico</span>
+            </h1>
+            <p class="text-[11px] text-gray-400 max-w-xl mt-1">
+                <strong>Descripción:</strong> Transpilador de requerimientos comerciales. Transforma lenguaje natural en código estructurado <em>Agile DSL</em> usando IA, ejecutando un análisis léxico, sintáctico y semántico estricto para calcular de forma determinista la complejidad del software en Story Points.
+            </p>
+        </div>
+        <p class="text-xs text-gray-500 font-mono self-end">Sustento Teórico Automatizado</p>
     </header>
 
-    <div class="mx-6 mt-4">
+    <div class="mx-6 mt-4 space-y-2">
         <div class="p-2.5 bg-gray-900 border-l-4 {% if status_type == 'success' %}border-emerald-500 text-emerald-400{% elif status_type == 'error' %}border-red-500 text-red-400{% else %}border-cyan-500 text-cyan-400{% endif %} text-xs font-mono rounded shadow">
             {{ status_message }}
         </div>
+        
+        {% if compiler_error %}
+            <div class="p-3 bg-red-950/40 border border-red-800 text-red-400 text-xs font-mono rounded shadow">
+                <span class="font-bold">❌ DETECCIÓN DE ANOMALÍA:</span> {{ compiler_error }}
+            </div>
+        {% endif %}
     </div>
 
     <main class="p-6 grid grid-cols-1 xl:grid-cols-3 gap-6">
         
         <div class="flex flex-col gap-4 bg-gray-900 p-4 rounded-lg border border-gray-800 shadow">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">📂 Entrada de Datos e IA</h2>
-            
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">📂 Fuentes</h2>
             <form action="{{ url_for('index') }}" method="POST" class="flex flex-col gap-2">
                 <input type="hidden" name="action" value="generate_dsl">
                 <input type="hidden" name="dsl_code" value="{{ generated_dsl }}">
-                <label class="text-[11px] font-mono text-gray-400">Requerimiento Comercial (Lenguaje Natural):</label>
+                <label class="text-[11px] font-mono text-gray-400">Requerimiento en Lenguaje Natural:</label>
                 <textarea name="prompt" class="h-20 w-full p-2 bg-gray-950 text-xs border border-gray-800 rounded focus:border-cyan-500 focus:outline-none text-gray-300 resize-none">{{ user_prompt }}</textarea>
-                <button type="submit" class="bg-cyan-700 hover:bg-cyan-600 text-white text-xs py-2 rounded font-semibold transition-all">
-                    Consultar Gemini API 🤖
-                </button>
+                <button type="submit" class="bg-cyan-700 hover:bg-cyan-600 text-white text-xs py-2 rounded font-semibold transition-all">Consultar Gemini API 🤖</button>
             </form>
 
             <form action="{{ url_for('index') }}" method="POST" class="flex-1 flex flex-col gap-2 mt-2">
                 <input type="hidden" name="action" value="compile_dsl">
                 <input type="hidden" name="prompt" value="{{ user_prompt }}">
-                <label class="text-[11px] font-mono text-emerald-400">Editor del Código Fuente (DSL Propietario):</label>
+                <label class="text-[11px] font-mono text-emerald-400">Código en Agile DSL:</label>
                 <textarea name="dsl_code" class="flex-1 w-full p-3 bg-gray-950 text-emerald-400 font-mono text-xs rounded border border-gray-800 focus:border-emerald-500 focus:outline-none resize-none min-h-[250px]">{{ generated_dsl }}</textarea>
-                <button type="submit" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-2.5 rounded font-semibold transition-all shadow">
-                    ⚡ Ejecutar Fases del Compilador
-                </button>
+                <button type="submit" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-2.5 rounded font-semibold transition-all shadow">⚡ Ejecutar Fases del Compilador</button>
             </form>
         </div>
 
         <div class="flex flex-col gap-4 bg-gray-900 p-4 rounded-lg border border-gray-800 shadow">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">🔬 Diagnóstico Interno del Compilador</h2>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">🔬 Análisis Interno</h2>
             
-            <div class="flex flex-col min-h-[180px]">
-                <span class="text-[11px] font-mono text-purple-400 mb-1">📟 Fase 1: Flujo de Tokens (Analizador Léxico):</span>
-                <div class="flex-1 bg-gray-950 p-2 rounded font-mono text-[10px] text-purple-300 overflow-y-auto whitespace-pre-wrap max-h-[180px] border border-gray-800">
+            <div class="flex flex-col">
+                <span class="text-[11px] font-mono text-purple-400 mb-1">📟 Tokens Identificados y Ubicación:</span>
+                <div class="h-28 bg-gray-950 p-2 rounded font-mono text-[10px] text-purple-300 overflow-y-auto border border-gray-800 space-y-0.5">
                     {% if tokens_list %}
                         {% for t in tokens_list %}
-{{ t }}
+                            <div>{{ t }}</div>
                         {% endfor %}
                     {% else %}
-[Esperando análisis léxico...]
+                        <span class="text-gray-600">[Vacio]</span>
                     {% endif %}
                 </div>
             </div>
 
-            <div class="flex flex-col min-h-[220px]">
-                <span class="text-[11px] font-mono text-amber-400 mb-1">🌳 Fase 2: Árbol de Sintaxis Abstracta (AST):</span>
-                <div class="flex-1 bg-gray-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-y-auto whitespace-pre max-h-[220px] border border-gray-800">
+            <div class="flex flex-col">
+                <span class="text-[11px] font-mono text-pink-400 mb-1">📊 Métricas Léxicas (Cantidades por Categoría):</span>
+                <div class="bg-gray-950 p-2 rounded border border-gray-800 grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
+                    <div class="bg-gray-900 p-1.5 rounded border border-gray-800">
+                        <div class="text-gray-400">KEYWORDS</div>
+                        <div class="text-pink-400 font-bold text-xs mt-0.5">{{ token_counts.get('KEYWORD', 0) }}</div>
+                    </div>
+                    <div class="bg-gray-900 p-1.5 rounded border border-gray-800">
+                        <div class="text-gray-400">IDENTIFIERS</div>
+                        <div class="text-cyan-400 font-bold text-xs mt-0.5">{{ token_counts.get('IDENTIFIER', 0) }}</div>
+                    </div>
+                    <div class="bg-gray-900 p-1.5 rounded border border-gray-800">
+                        <div class="text-gray-400">STRINGS</div>
+                        <div class="text-emerald-400 font-bold text-xs mt-0.5">{{ token_counts.get('STRING', 0) }}</div>
+                    </div>
+                    <div class="bg-gray-900 p-1.5 rounded border border-gray-800">
+                        <div class="text-gray-400">NUMBERS</div>
+                        <div class="text-amber-400 font-bold text-xs mt-0.5">{{ token_counts.get('NUMBER', 0) }}</div>
+                    </div>
+                    <div class="bg-gray-900 p-1.5 rounded border border-gray-800">
+                        <div class="text-gray-400">COLONS</div>
+                        <div class="text-purple-400 font-bold text-xs mt-0.5">{{ token_counts.get('COLON', 0) }}</div>
+                    </div>
+                    <div class="bg-gray-900 p-1.5 rounded border border-emerald-950 flex flex-col justify-center">
+                        <div class="text-[9px] text-emerald-400 font-bold">TOTAL TOKENS</div>
+                        <div class="text-white font-bold text-xs">
+                            {{ token_counts.get('KEYWORD',0) + token_counts.get('IDENTIFIER',0) + token_counts.get('STRING',0) + token_counts.get('NUMBER',0) + token_counts.get('COLON',0) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col min-h-[160px]">
+                <span class="text-[11px] font-mono text-amber-400 mb-1">🌳 Estructura Jerárquica (AST):</span>
+                <div class="flex-1 bg-gray-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-y-auto max-h-[180px] border border-gray-800">
                     {% if ast_json %}{{ ast_json }}{% else %}{ "status": "Esperando parsing..." }{% endif %}
                 </div>
             </div>
         </div>
 
         <div class="bg-gray-900 p-4 rounded-lg border border-gray-800 shadow flex flex-col">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">🎯 Salida Objeto: Tablero Ágil</h2>
-            
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2">🎯 Salida Objeto</h2>
             <div class="flex-1 overflow-y-auto space-y-3 mt-3 max-h-[450px] pr-1">
                 {% if stories %}
                     {% for story in stories %}
@@ -90,30 +127,43 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <div class="h-full flex items-center justify-center text-gray-600 italic text-xs text-center p-6">
-                        Ninguna estructura generada en producción. Compila el DSL para renderizar las tarjetas de historias.
-                    </div>
+                    <div class="h-full flex items-center justify-center text-gray-600 italic text-xs text-center p-6">Ninguna estructura generada en producción.</div>
                 {% endif %}
             </div>
         </div>
     </main>
 
-    <section class="mx-6 mb-6 bg-gray-900 rounded-lg border border-gray-800 shadow p-4">
-        <h2 class="text-sm font-bold text-cyan-400 uppercase tracking-wider border-b border-gray-800 pb-2 mb-4 flex items-center gap-2">
-            📚 Especificación Teórica del Autómata y Gramática (Sustento Científico)
+    <section class="mx-6 mb-6 bg-gray-900 rounded-lg border border-gray-800 shadow p-4 space-y-6">
+        <h2 class="text-sm font-bold text-cyan-400 uppercase tracking-wider border-b border-gray-800 pb-2 flex items-center gap-2">
+            📚 Especificación Teórica del Autómata y Gramática
         </h2>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
+        <div>
+            <h3 class="text-xs font-semibold text-pink-400 font-mono mb-3">🧬 Modelamiento de Autómatas Finitos (Gramática Regular del Lexer)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-950 p-3 rounded border border-gray-800 text-center">
+                    <div class="text-[11px] font-mono text-gray-400 mb-2">Autómata Finito No Determinista (AFND - Construcción de Thompson)</div>
+                    <img src="{{ url_for('static', filename='afnd.png') }}" alt="Diagrama de Transición AFND" class="mx-auto max-h-48 object-contain rounded border border-gray-800 bg-gray-900" onerror="this.style.display='none';">
+                    <div class="text-[10px] text-gray-600 font-mono mt-2">[Espacio asignado para static/afnd.png]</div>
+                </div>
+                <div class="bg-gray-950 p-3 rounded border border-gray-800 text-center">
+                    <div class="text-[11px] font-mono text-gray-400 mb-2">Autómata Finito Determinista (AFD Minimizado)</div>
+                    <img src="{{ url_for('static', filename='afd.png') }}" alt="Diagrama de Transición AFD" class="mx-auto max-h-48 object-contain rounded border border-gray-800 bg-gray-900" onerror="this.style.display='none';">
+                    <div class="text-[10px] text-gray-600 font-mono mt-2">[Espacio asignado para static/afd.png]</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
             <div class="space-y-3">
-                <h3 class="text-xs font-semibold text-purple-400 font-mono">📋 Tabla de Tokens y Patrones Léxicos (RegEx)</h3>
+                <h3 class="text-xs font-semibold text-purple-400 font-mono">📋 Tabla de Tokens y Patrones Léxicos</h3>
                 <div class="overflow-x-auto rounded border border-gray-800">
                     <table class="w-full text-left text-[11px] font-mono text-gray-300 bg-gray-950">
                         <thead class="bg-gray-800 text-gray-400 uppercase text-[10px]">
                             <tr>
                                 <th class="p-2 border-b border-gray-700">Token</th>
                                 <th class="p-2 border-b border-gray-700">Lexema Ejemplo</th>
-                                <th class="p-2 border-b border-gray-700">Expresión Regular (RegEx)</th>
+                                <th class="p-2 border-b border-gray-700">Expresión Regular</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
@@ -124,17 +174,17 @@
                             </tr>
                             <tr>
                                 <td class="p-2 text-cyan-400 font-bold">IDENTIFIER</td>
-                                <td class="p-2">US_001, HU_login</td>
+                                <td class="p-2">US_001</td>
                                 <td class="p-2 text-purple-300">\b[a-zA-Z_][a-zA-Z0-9_]*\b</td>
                             </tr>
                             <tr>
                                 <td class="p-2 text-cyan-400 font-bold">STRING</td>
-                                <td class="p-2">"Cliente", "Pagar"</td>
+                                <td class="p-2">"Cliente"</td>
                                 <td class="p-2 text-purple-300">"[^"]*"</td>
                             </tr>
                             <tr>
                                 <td class="p-2 text-cyan-400 font-bold">NUMBER</td>
-                                <td class="p-2">5, 13</td>
+                                <td class="p-2">8, 13</td>
                                 <td class="p-2 text-purple-300">\b\d+\b</td>
                             </tr>
                             <tr>
@@ -146,7 +196,7 @@
                     </table>
                 </div>
 
-                <h3 class="text-xs font-semibold text-amber-400 font-mono pt-2">📜 Gramática Libre de Contexto (GLC en formato BNF)</h3>
+                <h3 class="text-xs font-semibold text-amber-400 font-mono pt-2">📜 4 Reglas Gramaticales (Gramática Libre de Contexto en BNF)</h3>
                 <div class="bg-gray-950 p-3 rounded border border-gray-800 font-mono text-[11px] text-amber-200 space-y-1">
                     <p><span class="text-gray-500">1.</span> &lt;Programa&gt; ::= &lt;ListaHistorias&gt;</p>
                     <p><span class="text-gray-500">2.</span> &lt;ListaHistorias&gt; ::= &lt;Historia&gt; &lt;ListaHistorias&gt; | ε</p>
@@ -156,7 +206,7 @@
             </div>
 
             <div class="space-y-3">
-                <h3 class="text-xs font-semibold text-cyan-400 font-mono">📈 Tabla de Transición del Autómata Finito Determinista (AFD)</h3>
+                <h3 class="text-xs font-semibold text-cyan-400 font-mono">📈 Tabla de Transición de Estados (Matriz AFD Minimizado)</h3>
                 <div class="overflow-x-auto rounded border border-gray-800">
                     <table class="w-full text-left text-[11px] font-mono text-gray-300 bg-gray-950">
                         <thead class="bg-gray-800 text-gray-400 uppercase text-[10px]">
@@ -169,7 +219,7 @@
                                 <th class="p-2 border-b border-gray-700 text-center">¿Acepta?</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-800 text-center">
+                        <tbody class="divide-y divide-gray-800 text-center text-[10px]">
                             <tr>
                                 <td class="p-2 font-bold bg-gray-900 text-left">S0 (Inicio)</td>
                                 <td class="p-2">S1</td>
@@ -221,9 +271,7 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="text-[10px] text-gray-500 italic font-mono">Nota: Las celdas marcadas con guion (-) disparan una excepción por Mismatch (Error Léxico) al encontrar un carácter inesperado.</p>
             </div>
-
         </div>
     </section>
 
